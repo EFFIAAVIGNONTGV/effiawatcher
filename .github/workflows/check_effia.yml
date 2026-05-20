@@ -1,0 +1,34 @@
+name: Vérification abonnements EFFIA Avignon TGV
+
+on:
+  # Exécution automatique chaque matin à 7h00 (heure de Paris)
+  # cron utilise l'heure UTC → 7h Paris (CEST, UTC+2) = 5h UTC en été
+  schedule:
+    - cron: "0 5 * * *"
+
+  # Permet aussi un lancement manuel depuis l'interface GitHub
+  workflow_dispatch:
+
+jobs:
+  check-parking:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Récupération du code
+        uses: actions/checkout@v4
+
+      - name: Installation de Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Vérification des parkings EFFIA
+        env:
+          EMAIL_EXPEDITEUR:   ${{ secrets.EMAIL_EXPEDITEUR }}
+          EMAIL_DESTINATAIRE: ${{ secrets.EMAIL_DESTINATAIRE }}
+          EMAIL_MOT_DE_PASSE: ${{ secrets.EMAIL_MOT_DE_PASSE }}
+          EMAIL_SMTP_HOST:    ${{ secrets.EMAIL_SMTP_HOST }}
+          EMAIL_SMTP_PORT:    ${{ secrets.EMAIL_SMTP_PORT }}
+          NTFY_TOPIC:         ${{ secrets.NTFY_TOPIC }}
+        run: python check_abonnement.py
