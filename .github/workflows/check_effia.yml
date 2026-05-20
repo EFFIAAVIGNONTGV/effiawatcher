@@ -4,7 +4,7 @@ on:
   # Exécution automatique chaque matin à 7h00 (heure de Paris)
   # cron utilise l'heure UTC → 7h Paris (CEST, UTC+2) = 5h UTC en été
   schedule:
-    - cron: "0 5 * * *"
+    - cron: "0 7 * * *"
 
   # Permet aussi un lancement manuel depuis l'interface GitHub
   workflow_dispatch:
